@@ -14,8 +14,10 @@ def home():
 @app.route("/step", methods=["POST"])
 def step():
     """Avanca un step más."""
-    model.step()
-    return jsonify({"step": model.steps})
+    if (model.steps < 50):
+        model.step()
+        return jsonify({"step": model.steps})
+    return jsonify({"step": "MAX"})
 
 @app.route("/state", methods=["GET"])
 def get_state():
