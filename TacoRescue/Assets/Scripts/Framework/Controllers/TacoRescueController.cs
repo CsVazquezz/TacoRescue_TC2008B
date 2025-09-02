@@ -9,6 +9,8 @@ public class TacoRescueController : MonoBehaviour
     // Botón para ver el step y el estatus
     public Button stepButton;
 
+    public FireGrid fireGridManager;
+
     void Start()
     {
         // Agregar addlistener al presionarlo al botón
@@ -65,6 +67,8 @@ public class TacoRescueController : MonoBehaviour
             {
                 string json = www.downloadHandler.text;
                 Debug.Log("GET JSON (state): " + json);
+
+                fireGridManager.UpdateFireGrid(json);
             }
         }
     }
