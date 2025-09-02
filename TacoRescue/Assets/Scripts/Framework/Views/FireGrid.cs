@@ -13,7 +13,7 @@ public class FireGrid : MonoBehaviour
     public GameObject firePrefab;
     public GameObject smokePrefab;
 
-    public Vector3 startPosition = new Vector3(-7.1f, 1.7f, -5.2f);
+    public Vector3 startPosition = new Vector3(-7f, 1.7f, -5.2f);
     public float cellSize = 2f;
 
     public Transform gameElementsParent;

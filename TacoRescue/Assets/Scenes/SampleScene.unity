@@ -906,7 +906,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FireGrid
   firePrefab: {fileID: 833101683134488234, guid: fae358d073d254b41999f8c1cb16e349, type: 3}
   smokePrefab: {fileID: 8213376418430606041, guid: 5e8b52778b6ac054fae45048d0f029e9, type: 3}
-  startPosition: {x: -7.66, y: 1.7, z: -5.72}
+  startPosition: {x: -7, y: 1.7, z: -5.2}
   cellSize: 2
   gameElementsParent: {fileID: 1487783926}
 --- !u!4 &964345736
