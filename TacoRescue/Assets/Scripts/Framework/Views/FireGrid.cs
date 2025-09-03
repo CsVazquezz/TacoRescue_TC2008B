@@ -3,7 +3,7 @@ using UnityEngine;
 using Newtonsoft.Json;
 
 [System.Serializable]
-public class StateResponse
+public class FireStateResponse
 {
     public List<List<float>> fire; // matriz fire que viene en el JSON
 }
@@ -41,10 +41,10 @@ public class FireGrid : MonoBehaviour
 
     public void UpdateFireGrid(string json)
     {
-        StateResponse state;
+        FireStateResponse state;
         try
         {
-            state = JsonConvert.DeserializeObject<StateResponse>(json);
+            state = JsonConvert.DeserializeObject<FireStateResponse>(json);
         }
         catch (System.Exception e)
         {

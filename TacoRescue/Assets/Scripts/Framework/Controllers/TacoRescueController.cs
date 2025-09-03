@@ -10,6 +10,7 @@ public class TacoRescueController : MonoBehaviour
     public Button stepButton;
 
     public FireGrid fireGridManager;
+    public AgentGrid agentGridManager;
 
     void Start()
     {
@@ -68,6 +69,7 @@ public class TacoRescueController : MonoBehaviour
                 string json = www.downloadHandler.text;
                 Debug.Log("GET JSON (state): " + json);
 
+                agentGridManager.UpdateAgents(json);
                 fireGridManager.UpdateFireGrid(json);
             }
         }
