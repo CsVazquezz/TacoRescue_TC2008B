@@ -29,15 +29,16 @@ def get_state():
                 "id": i,
                 "x": agent.pos[0],
                 "y": agent.pos[1],
-                "carrying_victim": getattr(agent, "carrying_victim", False)
+                "carrying_victim": getattr(agent, "carrying_victim", False),
+                "AP": getattr(agent, "AP", False)
             }
             for i, agent in enumerate(model.schedule.agents)
         ],
         "fire": model.fire.tolist(),
         "walls": model.walls.tolist(),
         "walls_damage": model.walls_damage.tolist(),
-        "victims": [{"x": x, "y": y} for (x, y) in model.victims],
-        "false_alarms": [{"x": x, "y": y} for (x, y) in model.false_alarms]
+        "poi_unknown": [{"x": x, "y": y} for (x, y) in model.poi_unknown],
+        "poi": model.fire.tolist()
     }
     return jsonify(state)
 
