@@ -405,6 +405,11 @@ class TacoRescueAgent(Agent):
           if self.model.poi[pos] == 2:
             self.model.poi[pos] = 0
             self.model.poi_unknown.remove(pos)
+            self.model.events.append({
+              "step": self.model.steps,
+              "action": "remove_false_alarm",
+              "pos": pos
+            })
 
         if self.is_entry():
           if self.carrying_victim == True:

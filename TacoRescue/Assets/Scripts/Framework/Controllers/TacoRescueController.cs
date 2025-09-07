@@ -1,7 +1,9 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using Newtonsoft.Json;
 
 public class TacoRescueController : MonoBehaviour
 {
@@ -12,6 +14,8 @@ public class TacoRescueController : MonoBehaviour
     public FireGrid fireGridManager;
     public AgentGrid agentGridManager;
     public PoiGrid poiGridManager;
+    
+    private int currentEventIndex = 0;
 
     void Start()
     {
@@ -70,8 +74,25 @@ public class TacoRescueController : MonoBehaviour
                 string json = www.downloadHandler.text;
                 Debug.Log("GET JSON (state): " + json);
 
-                agentGridManager.UpdateAgents(json);
-                fireGridManager.UpdateFireGrid(json);
+                StateResponse state = JsonConvert.DeserializeObject<StateResponse>(json);
+                if (state == null) yield break;
+
+                if (state.events != null && currentEventIndex < state.events.Count)
+                {
+                    SimulationEvent ev = state.events[currentEventIndex];
+                    Debug.Log($"Procesando  el evento {currentEventIndex}: {ev.action} en ({ev.x},{ev.y})");
+
+                    agentGridManager.UpdateAgents(json, ev, currentEventIndex);
+                    fireGridManager.UpdateFireGrid(json, ev, currentEventIndex);
+                    poiGridManager.UpdatePoiGrid(json, ev, currentEventIndex);
+
+                    currentEventIndex++;
+                }
+                else
+                {
+                    Debug.Log("No new events to process.");
+                }
+                poiGridManager.ReplenishPoiGrid(json);
             }
         }
     }
