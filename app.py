@@ -34,6 +34,7 @@ def get_state():
             }
             for i, agent in enumerate(model.schedule.agents)
         ],
+        "events": model.events,
         "fire": model.fire.tolist(),
         "walls": model.walls.tolist(),
         "walls_damage": model.walls_damage.tolist(),

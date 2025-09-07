@@ -11,6 +11,7 @@ public class TacoRescueController : MonoBehaviour
 
     public FireGrid fireGridManager;
     public AgentGrid agentGridManager;
+    public PoiGrid poiGridManager;
 
     void Start()
     {
