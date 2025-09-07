@@ -512,6 +512,7 @@ class TacoRescueModel(Model):
 
     self.steps = 0
     self.current_index = 0
+    self.events = []
 
     self.damage = 0
     self.rescued_count = 0
