@@ -3,19 +3,10 @@ using UnityEngine;
 using Newtonsoft.Json;
 
 [System.Serializable]
-public class PoiEvent
-{
-    public string action;
-    public int x;
-    public int y;
-    public int step;
-}
-
-[System.Serializable]
 public class PoiStateResponse
 {
     public List<List<float>> poi;
-    public List<PoiEvent> events;
+    public List<SimulationEvent> events;
 }
 
 public class PoiGrid : MonoBehaviour

@@ -38,7 +38,6 @@ def get_state():
         "fire": model.fire.tolist(),
         "walls": model.walls.tolist(),
         "walls_damage": model.walls_damage.tolist(),
-        "poi_unknown": [{"x": x, "y": y} for (x, y) in model.poi_unknown],
         "poi": model.fire.tolist()
     }
     return jsonify(state)

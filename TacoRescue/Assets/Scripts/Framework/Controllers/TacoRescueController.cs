@@ -5,6 +5,30 @@ using UnityEngine.Networking;
 using UnityEngine.UI;
 using Newtonsoft.Json;
 
+[System.Serializable]
+public class StateResponse
+{
+    public List<AgentData> agents;
+    public List<List<float>> fire;
+    public List<List<float>> poi;
+    public List<SimulationEvent> events;
+}
+
+[System.Serializable]
+public class SimulationEvent
+{
+    public string action;
+    public int step;
+    public List<int> pos;
+    public List<int> pos1;
+    public List<int> pos2; 
+
+    public int x => pos != null && pos.Count > 0 ? pos[0] : 0;
+    public int y => pos != null && pos.Count > 1 ? pos[1] : 0;
+    public Vector2Int Pos1 => pos1 != null && pos1.Count == 2 ? new Vector2Int(pos1[0], pos1[1]) : Vector2Int.zero;
+    public Vector2Int Po2 => pos2 != null && pos2.Count == 2 ? new Vector2Int(pos2[0], pos2[1]) : Vector2Int.zero;
+}
+
 public class TacoRescueController : MonoBehaviour
 {
     private string baseUrl = "https://tacorescue-tc2008b.onrender.com";
@@ -82,8 +106,8 @@ public class TacoRescueController : MonoBehaviour
                     SimulationEvent ev = state.events[currentEventIndex];
                     Debug.Log($"Procesando  el evento {currentEventIndex}: {ev.action} en ({ev.x},{ev.y})");
 
-                    agentGridManager.UpdateAgents(json, ev, currentEventIndex);
-                    fireGridManager.UpdateFireGrid(json, ev, currentEventIndex);
+                    // agentGridManager.UpdateAgents(json, ev, currentEventIndex);
+                    // fireGridManager.UpdateFireGrid(json, ev, currentEventIndex);
                     poiGridManager.UpdatePoiGrid(json, ev, currentEventIndex);
 
                     currentEventIndex++;

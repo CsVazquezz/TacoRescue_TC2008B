@@ -181,6 +181,56 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1487783926}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &134121091
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 134121092}
+  - component: {fileID: 134121093}
+  m_Layer: 0
+  m_Name: PoiGridManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &134121092
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 134121091}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 487791511}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &134121093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 134121091}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35a85995d3e339e4e8b77ae329a28664, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PoiGrid
+  poiPrefab: {fileID: 4905889935744400412, guid: 3cdc7eb515c1a014a8d171e85dbaa0d1, type: 3}
+  victimPrefab: {fileID: 5309917214490638175, guid: aaf11cb050c46744f9c545c4bd11cd83, type: 3}
+  falseAlarmPrefab: {fileID: 2010924964012551246, guid: 777e612714639204683772bdf8b598ce, type: 3}
+  startPosition: {x: -7, y: 1.7, z: -5.2}
+  cellSize: 2
+  gameElementsParent: {fileID: 0}
 --- !u!1 &313392530
 GameObject:
   m_ObjectHideFlags: 0
@@ -672,6 +722,7 @@ Transform:
   - {fileID: 614522536}
   - {fileID: 964345736}
   - {fileID: 2110740970}
+  - {fileID: 134121092}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &614522535
@@ -791,6 +842,7 @@ MonoBehaviour:
   stepButton: {fileID: 793794389}
   fireGridManager: {fileID: 964345735}
   agentGridManager: {fileID: 2110740969}
+  poiGridManager: {fileID: 0}
 --- !u!114 &793794389
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1439,7 +1491,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3a588c6f1529e148b2480696d48a986, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AgentGrid
-  agentPrefab: {fileID: 146935546818660778, guid: 7f6862d8aee10a042821738d523fc6fa, type: 3}
+  agentPrefab: {fileID: 6461575869305629177, guid: c242c47be461b4d47a06e3767aad6d93, type: 3}
   startPosition: {x: -7, y: 1.7, z: -5.2}
   cellSize: 2
   moveSpeed: 5
