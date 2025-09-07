@@ -70,6 +70,11 @@ class TacoRescueAgent(Agent):
     if self.spend_AP(1):
       x, y = pos
       self.model.fire[x][y] = 0
+      self.model.events.append({
+        "step": self.model.steps,
+        "action": "remove_smoke",
+        "pos": (x, y)
+      })
       return True
 
     return False
@@ -81,6 +86,11 @@ class TacoRescueAgent(Agent):
     if self.spend_AP(2):
       x, y = pos
       self.model.fire[x][y] = 0
+      self.model.events.append({
+          "step": self.model.steps,
+          "action": "extinguish_fire",
+          "pos": (x, y)
+      })
       return True
     return False
 
@@ -106,6 +116,11 @@ class TacoRescueAgent(Agent):
       self.model.poi[pos] = 0
       self.model.poi_unknown.remove(pos)
       self.model.victims_on_board += 1
+      self.model.events.append({
+          "step": self.model.steps,
+          "action": "pick_up_victim",
+          "pos": pos
+      })
       return True
 
     return False
@@ -118,6 +133,11 @@ class TacoRescueAgent(Agent):
       self.carrying_victim = False
       self.model.rescued_count += 1
       self.model.victims_on_board -= 1
+      self.model.events.append({
+          "step": self.model.steps,
+          "action": "drop_off_victim",
+          "pos": pos
+      })
       return True
 
     return False
@@ -189,6 +209,12 @@ class TacoRescueAgent(Agent):
 
     self.model.walls[y1][x1][wall] = 0
     self.model.walls[y2][x2][opp] = 0
+    self.model.events.append({
+        "step": self.model.steps,
+        "action": "open_door",
+        "pos1": (x1, y1),
+        "pos2": (x2, y2)
+    })
 
   def damage_wall(self, pos1, pos2):
     if not self.is_wall_between(pos1, pos2):
@@ -218,6 +244,19 @@ class TacoRescueAgent(Agent):
       self.model.damage += 1
       if self.model.walls_damage[x1][y1][wall] == 2:
         self.model.walls[y1][x1][wall] = 0
+        self.model.events.append({
+          "step": self.model.steps,
+          "action": "demolish_wall",
+          "pos1": (x1, y1),
+          "pos2": (x2, y2)
+        })
+      else:
+        self.model.events.append({
+            "step": self.model.steps,
+            "action": "damage_wall",
+            "pos1": (x1, y1),
+            "pos2": (x2, y2)
+        })
 
     # También daña la pared opuesta en la celda vecina
     if 0 <= x2 < self.model.grid.width and 0 <= y2 < self.model.grid.height:
@@ -278,6 +317,11 @@ class TacoRescueAgent(Agent):
 
     # Si no tiene restricciones, mueve hacia al target posición
     self.model.grid.move_agent(self, target_pos)
+    self.model.events.append({
+      "step": self.model.steps,
+      "action": "move",
+      "pos": self.pos
+    })
 
     return True
 
