@@ -230,7 +230,7 @@ MonoBehaviour:
   falseAlarmPrefab: {fileID: 2010924964012551246, guid: 777e612714639204683772bdf8b598ce, type: 3}
   startPosition: {x: -7, y: 1.7, z: -5.2}
   cellSize: 2
-  gameElementsParent: {fileID: 0}
+  gameElementsParent: {fileID: 1487783926}
 --- !u!1 &313392530
 GameObject:
   m_ObjectHideFlags: 0
@@ -723,6 +723,7 @@ Transform:
   - {fileID: 964345736}
   - {fileID: 2110740970}
   - {fileID: 134121092}
+  - {fileID: 1958523134}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &614522535
@@ -842,7 +843,8 @@ MonoBehaviour:
   stepButton: {fileID: 793794389}
   fireGridManager: {fileID: 964345735}
   agentGridManager: {fileID: 2110740969}
-  poiGridManager: {fileID: 0}
+  poiGridManager: {fileID: 134121093}
+  wallDamageGridManager: {fileID: 1958523135}
 --- !u!114 &793794389
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1319,6 +1321,8 @@ Transform:
   - {fileID: 73776859}
   - {fileID: 1066803102}
   - {fileID: 987071584}
+  - {fileID: 1838845495}
+  - {fileID: 1739014843}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1729801763
@@ -1351,6 +1355,68 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1739014842
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1739014843}
+  m_Layer: 0
+  m_Name: POI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1739014843
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1739014842}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1487783926}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1838845494
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1838845495}
+  m_Layer: 0
+  m_Name: WallDamages
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1838845495
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1838845494}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1487783926}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1938451110
 GameObject:
@@ -1431,6 +1497,55 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1958523133
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1958523134}
+  - component: {fileID: 1958523135}
+  m_Layer: 0
+  m_Name: WallDamageGridManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1958523134
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1958523133}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 487791511}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1958523135
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1958523133}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e0eb97ccdf74db44bfb90a40a7e4a5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WallDamageGrid
+  damageOnePrefab: {fileID: 7900889398020414668, guid: 9d2e8d4bc40af5240831f4ea51b37ad5, type: 3}
+  damageTwoPrefab: {fileID: 7895237109403830440, guid: bf190d357eef84f4c8d7aa370922113a, type: 3}
+  startPosition: {x: -7, y: 1.7, z: -5.2}
+  cellSize: 2
+  gameElementsParent: {fileID: 1487783926}
 --- !u!1 &1984786903
 GameObject:
   m_ObjectHideFlags: 0

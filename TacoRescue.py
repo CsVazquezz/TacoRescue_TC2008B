@@ -37,8 +37,8 @@ matplotlib.rcParams['animation.embed_limit'] = 2**128
 
 
 class TacoRescueAgent(Agent):
-  def __init__(self, model):
-    super().__init__(model)
+  def __init__(self, unique_id, model):
+    super().__init__(unique_id, model)
     self.AP = 0
     self.carrying_victim = False
 
@@ -72,6 +72,7 @@ class TacoRescueAgent(Agent):
       self.model.fire[x][y] = 0
       self.model.events.append({
         "step": self.model.steps,
+        "id": self.unique_id,
         "action": "remove_smoke",
         "pos": (x, y)
       })
@@ -88,6 +89,7 @@ class TacoRescueAgent(Agent):
       self.model.fire[x][y] = 0
       self.model.events.append({
           "step": self.model.steps,
+          "id": self.unique_id,
           "action": "extinguish_fire",
           "pos": (x, y)
       })
@@ -118,6 +120,7 @@ class TacoRescueAgent(Agent):
       self.model.victims_on_board += 1
       self.model.events.append({
           "step": self.model.steps,
+          "id": self.unique_id,
           "action": "pick_up_victim",
           "pos": pos
       })
@@ -135,6 +138,7 @@ class TacoRescueAgent(Agent):
       self.model.victims_on_board -= 1
       self.model.events.append({
           "step": self.model.steps,
+          "id": self.unique_id,
           "action": "drop_off_victim",
           "pos": pos
       })
@@ -211,6 +215,7 @@ class TacoRescueAgent(Agent):
     self.model.walls[y2][x2][opp] = 0
     self.model.events.append({
         "step": self.model.steps,
+        "id": self.unique_id,
         "action": "open_door",
         "pos1": (x1, y1),
         "pos2": (x2, y2)
@@ -246,6 +251,7 @@ class TacoRescueAgent(Agent):
         self.model.walls[y1][x1][wall] = 0
         self.model.events.append({
           "step": self.model.steps,
+          "id": self.unique_id,
           "action": "demolish_wall",
           "pos1": (x1, y1),
           "pos2": (x2, y2)
@@ -253,6 +259,7 @@ class TacoRescueAgent(Agent):
       else:
         self.model.events.append({
             "step": self.model.steps,
+            "id": self.unique_id,
             "action": "damage_wall",
             "pos1": (x1, y1),
             "pos2": (x2, y2)
@@ -319,6 +326,7 @@ class TacoRescueAgent(Agent):
     self.model.grid.move_agent(self, target_pos)
     self.model.events.append({
       "step": self.model.steps,
+      "id": self.unique_id,
       "action": "move",
       "pos": self.pos
     })
@@ -407,6 +415,7 @@ class TacoRescueAgent(Agent):
             self.model.poi_unknown.remove(pos)
             self.model.events.append({
               "step": self.model.steps,
+              "id": self.unique_id,
               "action": "remove_false_alarm",
               "pos": pos
             })
@@ -572,7 +581,7 @@ class TacoRescueModel(Model):
     i = 0
     while (i < players):
       position = self.entries[i % len(self.entries)]
-      agent = TacoRescueAgent(self)
+      agent = TacoRescueAgent(unique_id=i, model = self)
       self.grid.place_agent(agent, position)
       self.schedule.add(agent)
       i += 1

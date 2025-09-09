@@ -26,7 +26,7 @@ def get_state():
         "step": model.steps,
         "agents": [
             {
-                "id": i,
+                "id": agent.unique_id,
                 "x": agent.pos[0],
                 "y": agent.pos[1],
                 "carrying_victim": getattr(agent, "carrying_victim", False),
@@ -38,6 +38,7 @@ def get_state():
         "fire": model.fire.tolist(),
         "walls": model.walls.tolist(),
         "walls_damage": model.walls_damage.tolist(),
+        "doors": model.doors.tolist(),
         "poi": model.fire.tolist()
     }
     return jsonify(state)

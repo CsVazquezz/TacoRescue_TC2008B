@@ -15,6 +15,7 @@ public class AgentData
 public class AgentStateResponse
 {
     public List<AgentData> agents;
+    public List<SimulationEvent> events;
 }
 
 public class AgentGrid : MonoBehaviour
@@ -49,10 +50,39 @@ public class AgentGrid : MonoBehaviour
                 agentsParent = agentsGO.transform;
             }
         }
+        List<Vector2Int> initialAgents = new List<Vector2Int>
+        {
+            new Vector2Int(5, 5),
+            new Vector2Int(3, 0),
+            new Vector2Int(2, 7),
+            new Vector2Int(0, 2)
+        };
+        int id = 0;
+        foreach (var agent in initialAgents)
+        {
+            Vector3 targetPos = new Vector3(
+                startPosition.x + agent.y * cellSize,
+                startPosition.y,
+                startPosition.z + agent.x * cellSize
+            );
+
+            if (!agentObjects.ContainsKey(agent.id))
+            {
+                GameObject obj = Instantiate(agentPrefab, targetPos, Quaternion.identity);
+                obj.name = $"Agent{agent.id}";
+
+                if (agentsParent != null)
+                    obj.transform.SetParent(agentsParent);
+
+                agentObjects[agent.id] = obj;
+            }
+        }
     }
 
-    public void UpdateAgents(string json)
+    public void UpdateAgents(string json, SimulationEvent ev, int eventIndex)
     {
+        if (ev == null) return;
+
         AgentStateResponse state;
         try
         {
@@ -70,28 +100,23 @@ public class AgentGrid : MonoBehaviour
             return;
         }
 
-        foreach (var agent in state.agents)
+        AgentData agentData = state.agents.Find(a => a.id == ev.agent_id);
+        if (agentData == null) return;
+
+        GameObject agentObj = agentObjects[agentData.id];
+
+        if (ev.action == "move" && ev.step == state.step)
         {
             Vector3 targetPos = new Vector3(
-                startPosition.x + agent.x * cellSize,
+                startPosition.x + ev.x * cellSize,
                 startPosition.y,
-                startPosition.z + agent.y * cellSize
+                startPosition.z + ev.y * cellSize
             );
-
-            if (agentObjects.ContainsKey(agent.id))
-            {
-                StartCoroutine(MoveAgent(agentObjects[agent.id].transform, targetPos));
-            }
-            else
-            {
-                GameObject obj = Instantiate(agentPrefab, targetPos, Quaternion.identity);
-                obj.name = $"Agent{agent.id}";
-
-                if (agentsParent != null)
-                    obj.transform.SetParent(agentsParent);
-
-                agentObjects[agent.id] = obj;
-            }
+            StartCoroutine(MoveAgent(agentObj.transform, targetPos));
+        }
+        else if (ev.action == "drop_off_victim")
+        {
+            
         }
     }
 

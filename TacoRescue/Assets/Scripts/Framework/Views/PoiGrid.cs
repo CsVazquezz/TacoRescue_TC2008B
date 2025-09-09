@@ -41,9 +41,9 @@ public class PoiGrid : MonoBehaviour
         }
         List<Vector2Int> initialPois = new List<Vector2Int>
         {
-            new Vector2Int(3, 4),
-            new Vector2Int(7, 1),
-            new Vector2Int(0, 1)
+            new Vector2Int(4, 3),
+            new Vector2Int(1, 7),
+            new Vector2Int(1, 0)
         };
 
         foreach (var pos in initialPois)
@@ -58,9 +58,10 @@ public class PoiGrid : MonoBehaviour
     public void UpdatePoiGrid(string json, SimulationEvent ev, int eventIndex)
     {
         if (ev == null) return;
+        PoiStateResponse state = JsonConvert.DeserializeObject<PoiStateResponse>(json);
         Vector2Int pos = new Vector2Int(ev.x, ev.y);
 
-        if (ev.action == "pick_up_victim")
+        if (ev.action == "pick_up_victim" && ev.step == state.step)
         {
             if (poiObjects.ContainsKey(pos))
             {
