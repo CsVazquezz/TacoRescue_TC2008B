@@ -26,7 +26,7 @@ def get_state():
         "step": model.steps,
         "agents": [
             {
-                "id": agent.unique_id,
+                "id": agent.id,
                 "x": agent.pos[0],
                 "y": agent.pos[1],
                 "carrying_victim": getattr(agent, "carrying_victim", False),
