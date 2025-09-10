@@ -1,10 +1,6 @@
 from flask import Flask, jsonify, request
 import TacoRescue
 
-
-# Inicializar el modelo
-model = TacoRescue.TacoRescueModel()
-
 app = Flask(__name__)
 
 @app.route("/")
@@ -14,7 +10,7 @@ def home():
 @app.route("/step", methods=["POST"])
 def step():
     """Avanca un step más."""
-    if (model.steps < 50):
+    while not model.end_game():
         model.step()
         return jsonify({"step": model.steps})
     return jsonify({"step": "MAX"})
@@ -45,5 +41,6 @@ def get_state():
 
 if __name__ == "__main__":
     import os
+    model = TacoRescue.TacoRescueModel()
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
