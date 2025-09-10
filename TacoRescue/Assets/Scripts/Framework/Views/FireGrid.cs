@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 [System.Serializable]
 public class FireStateResponse
 {
+    public int step;
     public List<List<float>> fire; // matriz fire que viene en el JSON
 }
 

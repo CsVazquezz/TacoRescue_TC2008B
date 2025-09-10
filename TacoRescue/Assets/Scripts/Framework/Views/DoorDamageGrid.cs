@@ -17,12 +17,14 @@ public struct DoorCoords
 [System.Serializable]
 public class DoorDamageStateResponse
 {
+    public int step;
     public Dictionary<string, List<int>> doors { get; set; }
 }
 
 public class DoorDamageGrid : MonoBehaviour
 {
-    public GameObject doorDamagePrefab;
+    public GameObject doorPrefab;
+    public GameObject doorOpenPrefab;
 
     public Vector3 startPosition = new Vector3(-7f, 1.7f, -5.2f);
     public float cellSize = 2f;
@@ -61,9 +63,32 @@ public class DoorDamageGrid : MonoBehaviour
         };
         foreach (var pos in initialDoors)
         {
-            SpawnDoorDamageObject(new Vector2Int(pos.x1, pos.y1), 1);
-            SpawnDoorDamageObject(new Vector2Int(pos.x2, pos.y2), 1);
+            SpawnDoorDamageObject(CalcularDireccion(pos.x1, pos.y1, pos.x2, pos.y2), new Vector2Int(pos.x1, pos.y1), 1);
         }
+    }
+
+    public int CalcularDireccion(int x1, int y1, int x2, int y2) 
+    {
+        int dx = x2 - x1;
+        int dy = y2 - y1;
+        int dir = -1;
+        if (dx == 1)
+        {
+            dir = 0;
+        }
+        else if (dx == -1)
+        {
+            dir = 2;
+        }
+        else if (dy == 1)
+        {
+            dir = 1;
+        }
+        else if (dy == -1)
+        {
+            dir = 3;
+        }
+        return dir;
     }
 
     public void UpdateDoorDamageGrid(string json, SimulationEvent ev, int eventIndex)
@@ -73,32 +98,7 @@ public class DoorDamageGrid : MonoBehaviour
 
         if (ev.action == "open_door" && ev.step == state.step)
         {
-            GameObject prefab = doorDamageOnePrefab;
-            Vector3 worldPos1 = new Vector3(
-                startPosition.x + ev.Pos1.y * cellSize,
-                startPosition.y,
-                startPosition.z + ev.Pos1.x * cellSize
-            );
-            Vector3 worldPos2 = new Vector3(
-                startPosition.x + ev.Pos2.y * cellSize,
-                startPosition.y,
-                startPosition.z + ev.Pos2.x * cellSize
-            );
-            
-            GameObject obj1 = Instantiate(prefab, worldPos1, Quaternion.identity);
-            GameObject obj2 = Instantiate(prefab, worldPos2, Quaternion.identity);
-
-            obj1.name = $"DoorDamage({ev.Pos1.y},{ev.Pos1.x})";
-            obj2.name = $"DoorDamage({ev.Pos2.y},{ev.Pos2.y})";
-
-            if (doorDamageParent != null)
-            {
-                obj1.transform.SetParent(doorDamageParent);
-                obj2.transform.SetParent(doorDamageParent);
-            }
-
-            doorDamageObjects[new Vector2Int(ev.Pos1.x, ev.Pos1.y)] = obj1;
-            doorDamageObjects[new Vector2Int(ev.Pos2.x, ev.Pos2.y)] = obj1;
+            SpawnDoorDamageObject(CalcularDireccion(ev.Pos1.x, ev.Pos1.y, ev.Pos2.x, ev.Pos2.y), new Vector2Int(ev.Pos1.x, ev.Pos1.y), 2);
         }
     }
 
@@ -121,22 +121,31 @@ public class DoorDamageGrid : MonoBehaviour
             return;
         }
 
-        List<Vector2Int> keysToRemove = new List<Vector2Int>();
+        HashSet<Vector2Int> currentKeys = new HashSet<Vector2Int>();
         foreach (var kv in state.doors)
         {   
-            string strKey = $"{kv.Key.y},{kv.Key.x}";
-            if (!doorDamageObjects.ContainsKey(strKey))
+            string key = kv.Key.Trim('(', ')');
+            string[] parts = key.Split(',');
+            int x = int.Parse(parts[0]);
+            int y = int.Parse(parts[1]);
+            currentKeys.Add(new Vector2Int(x, y));
+        }    
+        List<Vector2Int> keysToRemove = new List<Vector2Int>();
+        foreach (var kv in doorDamageObjects)
+        {
+            if (!currentKeys.Contains(kv.Key))
             {
-                Destroy(doorDamageObjects[pos]);
                 keysToRemove.Add(kv.Key);
             }
         }
-
-        foreach (var k in keysToRemove)
-            doorDamageObjects.Remove(k);
+        foreach (var key in keysToRemove)
+        {
+            Destroy(doorDamageObjects[key]);
+            doorDamageObjects.Remove(key);
+        }
     }
 
-    private void SpawnDoorDamageObject(Vector2Int gridPos, int option)
+    private void SpawnDoorDamageObject(int dir, Vector2Int gridPos, int option)
     {
         GameObject prefab1 = doorPrefab;
         GameObject prefab2 = doorOpenPrefab;
@@ -146,6 +155,14 @@ public class DoorDamageGrid : MonoBehaviour
             startPosition.y,
             startPosition.z + gridPos.x * cellSize
         );
+        
+        switch (dir)
+        {
+            case 0: worldPos += new Vector3(0, 0, cellSize / 2); break; // Arriba
+            case 1: worldPos += new Vector3(cellSize / 2, 0, 0); break; // Derecha
+            case 2: worldPos += new Vector3(0, 0, -cellSize / 2); break; // Abajo
+            case 3: worldPos += new Vector3(-cellSize / 2, 0, 0); break; // Izquierda 
+        }
         
         GameObject obj = option == 1 ? Instantiate(prefab1, worldPos, Quaternion.identity) : Instantiate(prefab2, worldPos, Quaternion.identity);
 

@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 [System.Serializable]
 public class PoiStateResponse
 {
+    public int step;
     public List<List<float>> poi;
     public List<SimulationEvent> events;
 }

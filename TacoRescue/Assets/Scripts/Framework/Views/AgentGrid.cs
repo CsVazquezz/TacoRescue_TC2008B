@@ -14,6 +14,7 @@ public class AgentData
 [System.Serializable]
 public class AgentStateResponse
 {
+    public int step;
     public List<AgentData> agents;
     public List<SimulationEvent> events;
 }
@@ -68,15 +69,16 @@ public class AgentGrid : MonoBehaviour
                 startPosition.z + agent.x * cellSize
             );
 
-            if (!agentObjects.ContainsKey(agent.id))
+            if (!agentObjects.ContainsKey(id))
             {
                 GameObject obj = Instantiate(agentPrefab, targetPos, Quaternion.identity);
-                obj.name = $"Agent{agent.id}";
+                obj.name = $"Agent{id}";
 
                 if (agentsParent != null)
                     obj.transform.SetParent(agentsParent);
 
-                agentObjects[agent.id] = obj;
+                agentObjects[id] = obj;
+                id ++;
             }
         }
     }
@@ -102,7 +104,7 @@ public class AgentGrid : MonoBehaviour
             return;
         }
 
-        AgentData agentData = state.agents.Find(a => a.id == ev.agent_id);
+        AgentData agentData = state.agents.Find(a => a.id == ev.id);
         if (agentData == null) return;
 
         GameObject agentObj = agentObjects[agentData.id];

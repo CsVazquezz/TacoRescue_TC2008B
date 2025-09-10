@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 [System.Serializable]
 public class WallDamageStateResponse
 {
+    public int step;
     public List<List<List<float>>> walls_damage { get; set; }
 }
 
@@ -70,22 +71,22 @@ public class WallDamageGrid : MonoBehaviour
     {
         int dx = x2 - x1;
         int dy = y2 - y1;
-        int dir;
+        int dir = -1;
         if (dx == 1)
-        {
-            dir = 1;
-        }
-        else if (dx == -1)
-        {
-            dir = 3;
-        }
-        else if (dy == 1)
         {
             dir = 0;
         }
-        else if (dy == -1)
+        else if (dx == -1)
         {
             dir = 2;
+        }
+        else if (dy == 1)
+        {
+            dir = 1;
+        }
+        else if (dy == -1)
+        {
+            dir = 3;
         }
         return dir;
     }
@@ -137,7 +138,7 @@ public class WallDamageGrid : MonoBehaviour
         }
     }
 
-    private void SpawnWallDamageObject(int direction, float value, Vector2Int gridPos)
+    private void SpawnWallDamageObject(int direction, double value, Vector2Int gridPos)
     {
         GameObject prefab1 = damageOnePrefab;
         GameObject prefab2 = damageTwoPrefab;

@@ -19,6 +19,7 @@ public class SimulationEvent
 {
     public string action;
     public int step;
+    public int id;
     public List<int> pos;
     public List<int> pos1;
     public List<int> pos2; 
@@ -112,14 +113,14 @@ public class TacoRescueController : MonoBehaviour
                     fireGridManager.UpdateFireGrid(json, ev, currentEventIndex);
                     doorDamageGridManager.UpdateDoorDamageGrid(json, ev, currentEventIndex);
                     wallDamageGridManager.UpdateWallDamageGrid(json, ev, currentEventIndex);
-                    poiGridManager.UpdatePoiGrid(json, ev, currentEventIndex);
+                    // poiGridManager.UpdatePoiGrid(json, ev, currentEventIndex);
 
                     currentEventIndex++;
                 }
                 fireGridManager.FillFireGrid(json);
                 doorDamageGridManager.FillDoorDamageGrid(json);
                 wallDamageGridManager.FillWallDamageGrid(json);
-                poiGridManager.ReplenishPoiGrid(json);
+                // poiGridManager.ReplenishPoiGrid(json);
             }
         }
     }
