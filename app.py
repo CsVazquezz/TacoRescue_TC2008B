@@ -3,6 +3,8 @@ import TacoRescue
 
 app = Flask(__name__)
 
+model = TacoRescue.TacoRescueModel()
+
 @app.route("/")
 def home():
     return "Flask API está en operación"
@@ -41,6 +43,5 @@ def get_state():
 
 if __name__ == "__main__":
     import os
-    model = TacoRescue.TacoRescueModel()
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)

@@ -822,15 +822,12 @@ class TacoRescueModel(Model):
 
   def end_game(self):
     if self.damage >= 24:
-      print(f"Edificio colapsado. Damage = {self.damage}")
       return True
 
     if self.rescued_count >= 7:
-      print(f"Victoria. Rescued = {self.rescued_count}")
       return True
 
     if self.lost_victims >= 4:
-      print(f"Derrota. Lost = {self.lost_victims}")
       return True
 
     return False

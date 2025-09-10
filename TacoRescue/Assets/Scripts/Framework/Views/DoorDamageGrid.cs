@@ -3,6 +3,18 @@ using UnityEngine;
 using Newtonsoft.Json;
 
 [System.Serializable]
+public struct DoorCoords
+{
+    public int x1, y1, x2, y2;
+
+    public DoorCoords(int x1, int y1, int x2, int y2)
+    {
+        this.x1 = x1; this.y1 = y1;
+        this.x2 = x2; this.y2 = y2;
+    }
+}
+
+[System.Serializable]
 public class DoorDamageStateResponse
 {
     public Dictionary<string, List<int>> doors { get; set; }
@@ -36,21 +48,21 @@ public class DoorDamageGrid : MonoBehaviour
                 doorDamageParent = doorDamagesGO.transform;
             }
         }
-        List<Vector4Int> initialDoors = new List<Vector4Int>
+        List<DoorCoords> initialDoors = new List<DoorCoords>
         {
-            new Vector4Int(3, 1, 3, 2),
-            new Vector4Int(5, 2, 5, 3),
-            new Vector4Int(2, 3, 1, 3),
-            new Vector4Int(4, 4, 4, 5),
-            new Vector4Int(0, 4, 0, 5),
-            new Vector4Int(2, 5, 2, 6),
-            new Vector4Int(0, 6, 0, 7),
-            new Vector4Int(4, 7, 3, 7),
+            new DoorCoords(3, 1, 3, 2),
+            new DoorCoords(5, 2, 5, 3),
+            new DoorCoords(2, 3, 1, 3),
+            new DoorCoords(4, 4, 4, 5),
+            new DoorCoords(0, 4, 0, 5),
+            new DoorCoords(2, 5, 2, 6),
+            new DoorCoords(0, 6, 0, 7),
+            new DoorCoords(4, 7, 3, 7),
         };
         foreach (var pos in initialDoors)
         {
-            SpawnDoorDamageObject(new Vector2Int(pos.x, pos.y), 1);
-            SpawnDoorDamageObject(new Vector2Int(pos.z, pos.w), 1);
+            SpawnDoorDamageObject(new Vector2Int(pos.x1, pos.y1), 1);
+            SpawnDoorDamageObject(new Vector2Int(pos.x2, pos.y2), 1);
         }
     }
 
