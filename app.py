@@ -9,6 +9,14 @@ model = TacoRescue.TacoRescueModel()
 def home():
     return "Flask API está en operación"
 
+def convert_keys(d):
+    if isinstance(d, dict):
+        return {str(k): convert_keys(v) for k, v in d.items()}
+    elif isinstance(d, list):
+        return [convert_keys(i) for i in d]
+    else:
+        return d
+
 @app.route("/step", methods=["POST"])
 def step():
     """Avanca un step más."""
@@ -39,7 +47,7 @@ def get_state():
         "doors": model.doors,
         "poi": model.fire.tolist()
     }
-    return jsonify(state)
+    return jsonify(convert_keys(state))
 
 if __name__ == "__main__":
     import os
