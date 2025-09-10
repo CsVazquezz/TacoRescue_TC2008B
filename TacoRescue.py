@@ -38,7 +38,7 @@ matplotlib.rcParams['animation.embed_limit'] = 2**128
 
 class TacoRescueAgent(Agent):
   def __init__(self, unique_id, model):
-    super().__init__(unique_id, model)
+    super().__init__(unique_id=unique_id, model=model)
     self.AP = 0
     self.carrying_victim = False
 
