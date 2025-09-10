@@ -36,7 +36,7 @@ def get_state():
         "fire": model.fire.tolist(),
         "walls": model.walls.tolist(),
         "walls_damage": model.walls_damage.tolist(),
-        "doors": model.doors.tolist(),
+        "doors": model.doors,
         "poi": model.fire.tolist()
     }
     return jsonify(state)
