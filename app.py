@@ -19,11 +19,13 @@ def convert_keys(d):
 
 @app.route("/step", methods=["POST"])
 def step():
-    """Avanca un step más."""
-    while not model.end_game():
-        model.step()
-        return jsonify({"step": model.steps})
-    return jsonify({"step": "MAX"})
+    global model
+    if model.end_game():
+        print("Se acabo la simulación, reiniciando el modelo...")
+        model = TacoRescue.TacoRescueModel()
+        return jsonify({"step": "Reinicado"})
+    model.step()
+    return jsonify({"step": model.steps})
 
 @app.route("/state", methods=["GET"])
 def get_state():

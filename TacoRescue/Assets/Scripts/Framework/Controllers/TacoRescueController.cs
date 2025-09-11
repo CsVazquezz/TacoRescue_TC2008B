@@ -107,7 +107,7 @@ public class TacoRescueController : MonoBehaviour
                 if (state.events != null && currentEventIndex < state.events.Count)
                 {
                     SimulationEvent ev = state.events[currentEventIndex];
-                    Debug.Log($"Procesando  el evento {currentEventIndex}: {ev.action} en ({ev.x},{ev.y})");
+                    Debug.Log($"Procesando  el evento {currentEventIndex}, step {ev.step}: agente {ev.id}, {ev.action} en ({ev.x},{ev.y})");
 
                     agentGridManager.UpdateAgents(json, ev, currentEventIndex);
                     fireGridManager.UpdateFireGrid(json, ev, currentEventIndex);

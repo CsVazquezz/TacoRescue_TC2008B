@@ -108,15 +108,17 @@ public class AgentGrid : MonoBehaviour
         if (agentData == null) return;
 
         GameObject agentObj = agentObjects[agentData.id];
+        Debug.Log($"Update Agent Grid ev.step: {ev.step} state.step: {state.step} ev.action: {ev.action}");
 
         if (ev.action == "move" && ev.step == state.step)
         {
             Vector3 targetPos = new Vector3(
-                startPosition.x + ev.x * cellSize,
+                startPosition.x + ev.y * cellSize,
                 startPosition.y,
-                startPosition.z + ev.y * cellSize
+                startPosition.z + ev.x * cellSize
             );
             StartCoroutine(MoveAgent(agentObj.transform, targetPos));
+            Debug.Log($"Agent {agentData.id} moving from {agentObj.transform.position} to {targetPos}");
         }
         else if (ev.action == "drop_off_victim")
         {
