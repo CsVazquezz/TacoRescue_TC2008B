@@ -366,6 +366,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TacoRescueController
   stepButton: {fileID: 789462642}
+  fireGridManager: {fileID: 0}
+  agentGridManager: {fileID: 0}
+  poiGridManager: {fileID: 0}
+  wallDamageGridManager: {fileID: 0}
+  doorDamageGridManager: {fileID: 0}
 --- !u!114 &789462642
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -509,7 +514,8 @@ MonoBehaviour:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_fontSharedMaterials: []
+  m_fontSharedMaterials:
+  - {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
