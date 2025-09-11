@@ -47,7 +47,7 @@ def get_state():
         "walls": model.walls.tolist(),
         "walls_damage": model.walls_damage.tolist(),
         "doors": model.doors,
-        "poi": model.fire.tolist(),
+        "poi": model.poi_unknown.tolist(),
         "damage": model.damage,
         "rescued_count": model.rescued_count,
         "lost_victims": model.lost_victims

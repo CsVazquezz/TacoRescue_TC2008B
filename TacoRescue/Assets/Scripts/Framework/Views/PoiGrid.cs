@@ -119,27 +119,21 @@ public class PoiGrid : MonoBehaviour
             return;
         }
 
+        foreach (var obj in poiObjects.Values)
+        {
+            if (obj != null) Destroy(obj);
+        }
+        poiObjects.Clear();
+
+        // Rebuild from scratch
         for (int y = 0; y < state.poi.Count; y++)
         {
             for (int x = 0; x < state.poi[y].Count; x++)
             {
                 int value = (int)state.poi[y][x];
-                Vector2Int pos = new Vector2Int(x, y);
-
-                if (poiObjects.ContainsKey(pos))
+                if (value != 0.0)
                 {
-                    if (value == 0.0)
-                    {
-                        Destroy(poiObjects[pos]);
-                        poiObjects.Remove(pos);
-                    }
-                }
-                else
-                {
-                    if (value != 0.0)
-                    {
-                        SpawnPoiObject(pos);
-                    }
+                    SpawnPoiObject(new Vector2Int(x, y));
                 }
             }
         }
