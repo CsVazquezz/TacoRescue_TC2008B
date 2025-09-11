@@ -128,7 +128,7 @@ public class DoorDamageGrid : MonoBehaviour
             string[] parts = key.Split(',');
             int x = int.Parse(parts[0]);
             int y = int.Parse(parts[1]);
-            currentKeys.Add(new Vector2Int(x, y));
+            currentKeys.Add(new Vector2Int(y, x));
         }    
         List<Vector2Int> keysToRemove = new List<Vector2Int>();
         foreach (var kv in doorDamageObjects)

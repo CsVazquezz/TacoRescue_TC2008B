@@ -44,39 +44,26 @@ public class FireGrid : MonoBehaviour
     {
         if (ev == null) return;
         FireStateResponse state = JsonConvert.DeserializeObject<FireStateResponse>(json);
-        Vector2Int pos = new Vector2Int(ev.x, ev.y);
+        Vector2Int pos = new Vector2Int(ev.y, ev.x);
 
         if (ev.action == "extinguish_fire" && ev.step == state.step)
         {
+            Debug.Log("Trying to extinguish fire");
             if (fireObjects.ContainsKey(pos))
             {
                 Destroy(fireObjects[pos]);
                 fireObjects.Remove(pos);
+                Debug.Log("Fire removed");
             }
         }
         else if (ev.action == "remove_smoke")
         {
+            Debug.Log("Trying to remove smoke");
             if (fireObjects.ContainsKey(pos))
             {
                 Destroy(fireObjects[pos]); // Remover PoiPrefab
                 fireObjects.Remove(pos);
-                GameObject prefab = smokePrefab;
-
-                Vector3 worldPos = new Vector3(
-                    startPosition.x + ev.y * cellSize,
-                    startPosition.y,
-                    startPosition.z + ev.x * cellSize
-                );
-
-                GameObject obj = Instantiate(prefab, worldPos, Quaternion.identity);
-
-                obj.name = $"Smoke({ev.y},{ev.x})";
-
-                if (firesParent != null)
-                {
-                    obj.transform.SetParent(firesParent);
-                }
-                fireObjects[pos] = obj;
+                Debug.Log("Smoke removed");
             }
         }
     }

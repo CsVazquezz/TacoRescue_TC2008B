@@ -128,7 +128,7 @@ public class PoiGrid : MonoBehaviour
 
                 if (poiObjects.ContainsKey(pos))
                 {
-                    if (value == 0)
+                    if (value == 0.0)
                     {
                         Destroy(poiObjects[pos]);
                         poiObjects.Remove(pos);
@@ -136,7 +136,7 @@ public class PoiGrid : MonoBehaviour
                 }
                 else
                 {
-                    if (value != 0)
+                    if (value != 0.0)
                     {
                         SpawnPoiObject(pos);
                     }

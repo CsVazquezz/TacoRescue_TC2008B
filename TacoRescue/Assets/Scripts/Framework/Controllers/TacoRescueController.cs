@@ -106,7 +106,7 @@ public class TacoRescueController : MonoBehaviour
                 if (state.events == null) yield break;
                 if (state.step == 0) 
                 {
-                    fireGridManager.FillFireGrid(json);
+                    // fireGridManager.FillFireGrid(json);
                     yield return StepSimulation();
                 }
                 if (currentEventIndex >= state.events.Count) yield break;
@@ -123,20 +123,20 @@ public class TacoRescueController : MonoBehaviour
                     }   
 
                     agentGridManager.UpdateAgents(json, ev, currentEventIndex);
-                    fireGridManager.UpdateFireGrid(json, ev, currentEventIndex);
-                    doorDamageGridManager.UpdateDoorDamageGrid(json, ev, currentEventIndex);
-                    wallDamageGridManager.UpdateWallDamageGrid(json, ev, currentEventIndex);
-                    // poiGridManager.UpdatePoiGrid(json, ev, currentEventIndex);
+                    // fireGridManager.UpdateFireGrid(json, ev, currentEventIndex);
+                    // doorDamageGridManager.UpdateDoorDamageGrid(json, ev, currentEventIndex);
+                    // wallDamageGridManager.UpdateWallDamageGrid(json, ev, currentEventIndex);
+                    poiGridManager.UpdatePoiGrid(json, ev, currentEventIndex);
 
                     currentEventIndex++;
                 } 
                 if (currentEventIndex == state.events.Count && ev.step == state.step) 
                 {
-                    yield return new WaitForSeconds(5f);
-                    fireGridManager.FillFireGrid(json);
-                    doorDamageGridManager.FillDoorDamageGrid(json);
-                    wallDamageGridManager.FillWallDamageGrid(json);
-                    // poiGridManager.ReplenishPoiGrid(json);
+                    yield return new WaitForSeconds(3f);
+                    // fireGridManager.FillFireGrid(json);
+                    // doorDamageGridManager.FillDoorDamageGrid(json);
+                    // wallDamageGridManager.FillWallDamageGrid(json);
+                    poiGridManager.ReplenishPoiGrid(json);
                     yield return StepSimulation();
                 }
             }   

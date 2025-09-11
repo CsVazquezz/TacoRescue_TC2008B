@@ -122,7 +122,10 @@ public class WallDamageGrid : MonoBehaviour
                     Vector3Int wallKey = new Vector3Int(x, y, dir);
                     if (value == 1.0)
                     {
-                        SpawnWallDamageObject(dir, value, new Vector2Int(y, x));
+                        if (!wallDamageObjects.ContainsKey(wallKey)) 
+                        {
+                            SpawnWallDamageObject(dir, value, new Vector2Int(x, y));
+                        }
                     }
                     else if (value == 2.0)
                     {
@@ -131,7 +134,7 @@ public class WallDamageGrid : MonoBehaviour
                             Destroy(wallDamageObjects[wallKey]);
                             wallDamageObjects.Remove(wallKey);
                         }
-                        SpawnWallDamageObject(dir, value, new Vector2Int(y, x));
+                        SpawnWallDamageObject(dir, value, new Vector2Int(x, y));
                     }
                 }
             }

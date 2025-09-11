@@ -32,6 +32,7 @@ public class AgentGrid : MonoBehaviour
     [Header("Hierarchy Parents")]
     public Transform gameElementsParent;
     private Transform agentsParent;
+    private Dictionary<int, Coroutine> agentCoroutines = new Dictionary<int, Coroutine>();
 
     private Dictionary<int, GameObject> agentObjects = new Dictionary<int, GameObject>();
 
@@ -117,15 +118,32 @@ public class AgentGrid : MonoBehaviour
                 startPosition.y,
                 startPosition.z + ev.y * cellSize
             );
-            StartCoroutine(MoveAgent(agentObj.transform, targetPos));
+            if (agentCoroutines.ContainsKey(agentData.id) && agentCoroutines[agentData.id] != null)
+            {
+                StopCoroutine(agentCoroutines[agentData.id]);
+            }
+            agentCoroutines[agentData.id] = StartCoroutine(MoveAgent(agentObj.transform, targetPos, agentData.id));;
+        } 
+        else if (ev.action == "knock_out")
+        {
+            Vector3 targetPos = new Vector3(
+                startPosition.x + ev.x * cellSize,
+                startPosition.y,
+                startPosition.z + ev.y * cellSize
+            );
+            if (agentCoroutines.ContainsKey(agentData.id) && agentCoroutines[agentData.id] != null)
+            {
+                StopCoroutine(agentCoroutines[agentData.id]);
+            }
+            agentCoroutines[agentData.id] = StartCoroutine(MoveAgent(agentObj.transform, targetPos, agentData.id));;
         }
-        else if (ev.action == "drop_off_victim" && ev.step == state.step)
+        else if (ev.action == "drop_off_victim")
         {
             // si solo si se necesita
         }
     }
 
-    private System.Collections.IEnumerator MoveAgent(Transform agentTransform, Vector3 targetPos)
+    private System.Collections.IEnumerator MoveAgent(Transform agentTransform, Vector3 targetPos, int agentId)
     {
         while (Vector3.Distance(agentTransform.position, targetPos) > 0.01f)
         {
@@ -137,5 +155,6 @@ public class AgentGrid : MonoBehaviour
             yield return null;
         }
         agentTransform.position = targetPos;
+        agentCoroutines[agentId] = null;
     }
 }
