@@ -98,7 +98,7 @@ public class DoorDamageGrid : MonoBehaviour
 
         if (ev.action == "open_door" && ev.step == state.step)
         {
-            SpawnDoorDamageObject(CalcularDireccion(ev.Pos1.x, ev.Pos1.y, ev.Pos2.x, ev.Pos2.y), new Vector2Int(ev.Pos1.x, ev.Pos1.y), 2);
+            SpawnDoorDamageObject(CalcularDireccion(ev.Pos1.y, ev.Pos1.x, ev.Pos2.y, ev.Pos2.x), new Vector2Int(ev.Pos1.y, ev.Pos1.x), 2);
         }
     }
 

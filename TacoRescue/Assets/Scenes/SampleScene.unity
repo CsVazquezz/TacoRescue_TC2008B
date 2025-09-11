@@ -639,6 +639,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2892503652675513744, guid: 8f231d0bbde754e54bc15bb80aa11ef3, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3118838273011016823, guid: 8f231d0bbde754e54bc15bb80aa11ef3, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3543026953030384043, guid: 8f231d0bbde754e54bc15bb80aa11ef3, type: 3}
       propertyPath: m_Name
       value: GameBoard 1

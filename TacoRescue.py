@@ -366,6 +366,12 @@ class TacoRescueAgent(Agent):
       self.model.lost_victims += 1
       self.model.victims_on_board -= 1
     self.model.grid.move_agent(self, self.nearest_entry())
+    self.model.events.append({
+          "step": self.model.steps,
+          "id": self.id,
+          "action": "knock_out",
+          "pos": self.pos
+    })
     return True
 
   def step(self):

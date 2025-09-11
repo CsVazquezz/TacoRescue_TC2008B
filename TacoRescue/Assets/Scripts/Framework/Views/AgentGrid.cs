@@ -110,19 +110,18 @@ public class AgentGrid : MonoBehaviour
         GameObject agentObj = agentObjects[agentData.id];
         Debug.Log($"Update Agent Grid ev.step: {ev.step} state.step: {state.step} ev.action: {ev.action}");
 
-        if (ev.action == "move" && ev.step == state.step)
+        if ( (ev.action == "move" || ev.action == "knock_out") && ev.step == state.step)
         {
             Vector3 targetPos = new Vector3(
-                startPosition.x + ev.y * cellSize,
+                startPosition.x + ev.x * cellSize,
                 startPosition.y,
-                startPosition.z + ev.x * cellSize
+                startPosition.z + ev.y * cellSize
             );
             StartCoroutine(MoveAgent(agentObj.transform, targetPos));
-            Debug.Log($"Agent {agentData.id} moving from {agentObj.transform.position} to {targetPos}");
         }
-        else if (ev.action == "drop_off_victim")
+        else if (ev.action == "drop_off_victim" && ev.step == state.step)
         {
-            
+            // si solo si se necesita
         }
     }
 

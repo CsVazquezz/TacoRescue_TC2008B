@@ -44,14 +44,14 @@ public class WallDamageGrid : MonoBehaviour
     {
         if (ev == null) return;
         WallDamageStateResponse state = JsonConvert.DeserializeObject<WallDamageStateResponse>(json);
-        int dir1 = CalcularDireccion(ev.Pos1.x, ev.Pos1.y, ev.Pos2.x, ev.Pos2.y);
-        int dir2 = CalcularDireccion(ev.Pos2.x, ev.Pos2.y, ev.Pos1.x, ev.Pos1.y);
+        int dir1 = CalcularDireccion(ev.Pos1.y, ev.Pos1.x, ev.Pos2.y, ev.Pos2.x);
+        int dir2 = CalcularDireccion(ev.Pos2.y, ev.Pos2.x, ev.Pos1.y, ev.Pos1.x);
         Vector3Int wallKey1 = new Vector3Int(ev.Pos1.x, ev.Pos1.y, dir1);
         Vector3Int wallKey2 = new Vector3Int(ev.Pos2.x, ev.Pos2.y, dir2);
         if (ev.action == "damage_wall" && ev.step == state.step)
         {
-            SpawnWallDamageObject(dir1, 1.0, new Vector2Int(ev.Pos1.x, ev.Pos1.y));
-            SpawnWallDamageObject(dir2, 1.0, new Vector2Int(ev.Pos2.x, ev.Pos2.y));
+            SpawnWallDamageObject(dir1, 1.0, new Vector2Int(ev.Pos1.y, ev.Pos1.x));
+            SpawnWallDamageObject(dir2, 1.0, new Vector2Int(ev.Pos2.y, ev.Pos2.x));
         }
         else if (ev.action == "demolish_wall" && ev.step == state.step)
         {
@@ -62,8 +62,8 @@ public class WallDamageGrid : MonoBehaviour
                 Destroy(wallDamageObjects[wallKey2]);
                 wallDamageObjects.Remove(wallKey2);
             }
-            SpawnWallDamageObject(dir1, 2.0, new Vector2Int(ev.Pos1.x, ev.Pos1.y));
-            SpawnWallDamageObject(dir2, 2.0, new Vector2Int(ev.Pos2.x, ev.Pos2.y));
+            SpawnWallDamageObject(dir1, 2.0, new Vector2Int(ev.Pos1.y, ev.Pos1.x));
+            SpawnWallDamageObject(dir2, 2.0, new Vector2Int(ev.Pos2.y, ev.Pos2.x));
         }
     }
 
@@ -122,7 +122,7 @@ public class WallDamageGrid : MonoBehaviour
                     Vector3Int wallKey = new Vector3Int(x, y, dir);
                     if (value == 1.0)
                     {
-                        SpawnWallDamageObject(dir, value, new Vector2Int(x, y));
+                        SpawnWallDamageObject(dir, value, new Vector2Int(y, x));
                     }
                     else if (value == 2.0)
                     {
@@ -131,7 +131,7 @@ public class WallDamageGrid : MonoBehaviour
                             Destroy(wallDamageObjects[wallKey]);
                             wallDamageObjects.Remove(wallKey);
                         }
-                        SpawnWallDamageObject(dir, value, new Vector2Int(x, y));
+                        SpawnWallDamageObject(dir, value, new Vector2Int(y, x));
                     }
                 }
             }
