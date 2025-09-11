@@ -46,6 +46,11 @@ public class DoorDamageGrid : MonoBehaviour
     public float cellSize = 2f; // Tamaño de cada celda de la cuadrícula
     public float doorDetectionRadius = 3f; // Radio aumentado para ayudar a encontrar puertas
 
+    [Header("Configuración de Proximidad de Agentes")]
+    public float agentProximityRadius = 1f; // Radio para detectar agentes cerca de puertas
+    public LayerMask agentLayerMask = -1; // Layer mask para detectar agentes
+    public string agentTag = "Agent"; // Tag de los agentes
+    
     public Transform gameElementsParent; // Padre de los elementos del juego
 
     // Diccionarios para mapear posiciones de cuadrícula a objetos de puerta y sus estados
@@ -64,8 +69,75 @@ public class DoorDamageGrid : MonoBehaviour
         if (gridToDoorMapping.Count < 3) // Si mapeamos menos de 3 puertas
         {
             Debug.Log("El mapeo basado en nombres encontró pocas puertas, intentando mapeo basado en posiciones...");
-            MapDoorsByActualPositions();
         }
+    }
+
+    /// <summary>
+    /// Actualiza continuamente para verificar la proximidad de agentes a las puertas
+    /// </summary>
+    void Update()
+    {
+        CheckAgentProximityToDoors();
+    }
+
+    /// <summary>
+    /// Verifica si hay agentes cerca de las puertas y las abre/cierra automáticamente
+    /// </summary>
+    private void CheckAgentProximityToDoors()
+    {
+        foreach (var doorMapping in gridToDoorMapping)
+        {
+            Vector2Int gridPos = doorMapping.Key;
+            GameObject doorObject = doorMapping.Value;
+            
+            if (doorObject == null) continue;
+
+            bool agentNearby = IsAgentNearDoor(doorObject.transform.position);
+            bool currentlyOpen = doorStates.GetValueOrDefault(gridPos, false);
+
+            // Abre la puerta si hay un agente cerca y está cerrada
+            if (agentNearby && !currentlyOpen)
+            {
+                OpenDoor(gridPos);
+            }
+            // Cierra la puerta si no hay agentes cerca y está abierta
+            else if (!agentNearby && currentlyOpen)
+            {
+                CloseDoor(gridPos);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Verifica si hay algún agente cerca de una posición específica
+    /// </summary>
+    /// <param name="doorPosition">Posición de la puerta</param>
+    /// <returns>True si hay un agente cerca, false en caso contrario</returns>
+    private bool IsAgentNearDoor(Vector3 doorPosition)
+    {
+        // Busca objetos con el tag especificado dentro del radio
+        GameObject[] agentsInRange = GameObject.FindGameObjectsWithTag(agentTag);
+        
+        foreach (GameObject agent in agentsInRange)
+        {
+            float distance = Vector3.Distance(agent.transform.position, doorPosition);
+            if (distance <= agentProximityRadius)
+            {
+                return true;
+            }
+        }
+
+        // Método alternativo usando Physics.OverlapSphere si los agentes tienen Colliders
+        Collider[] agentColliders = Physics.OverlapSphere(doorPosition, agentProximityRadius, agentLayerMask);
+        foreach (Collider col in agentColliders)
+        {
+            if (col.CompareTag(agentTag))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /// <summary>
@@ -242,6 +314,7 @@ public class DoorDamageGrid : MonoBehaviour
 
     /// <summary>
     /// Actualiza la cuadrícula de daño de puertas basándose en eventos de simulación
+    /// NOTA: Las puertas ahora se abren automáticamente por proximidad de agentes, no por eventos
     /// </summary>
     /// <param name="json">Datos JSON con el estado actual</param>
     /// <param name="ev">Evento de simulación</param>
@@ -257,6 +330,9 @@ public class DoorDamageGrid : MonoBehaviour
             return;
         }
         
+        // COMENTADO: Ya no abrimos puertas basándose en eventos de simulación
+        // Las puertas ahora se abren automáticamente cuando los agentes se acercan
+        /*
         DoorDamageStateResponse state = JsonConvert.DeserializeObject<DoorDamageStateResponse>(json);
 
         if (ev.action == "open_door" && ev.step == state.step)
@@ -265,6 +341,7 @@ public class DoorDamageGrid : MonoBehaviour
             Debug.Log($"Intentando abrir puerta en posición de cuadrícula {gridPos}");
             OpenDoor(gridPos);
         }
+        */
     }
 
     /// <summary>
@@ -287,7 +364,7 @@ public class DoorDamageGrid : MonoBehaviour
                     {
                         animator.SetTrigger(openAnimationTrigger);
                         doorStates[gridPos] = true;
-                        Debug.Log($"Abriendo puerta en posición de cuadrícula {gridPos}: {doorObject.name}");
+                        Debug.Log($"Abriendo puerta por proximidad de agente en posición {gridPos}: {doorObject.name}");
                     }
                     else
                     {
@@ -301,7 +378,7 @@ public class DoorDamageGrid : MonoBehaviour
                             {
                                 animator.SetTrigger(trigger);
                                 doorStates[gridPos] = true;
-                                Debug.Log($"Abriendo puerta en posición de cuadrícula {gridPos}: {doorObject.name} usando trigger: {trigger}");
+                                Debug.Log($"Abriendo puerta por proximidad en posición {gridPos}: {doorObject.name} usando trigger: {trigger}");
                                 Debug.LogWarning($"Considera actualizar openAnimationTrigger a '{trigger}' en el inspector para mejor rendimiento");
                                 triggerFound = true;
                                 break;
@@ -426,10 +503,14 @@ public class DoorDamageGrid : MonoBehaviour
 
     /// <summary>
     /// Llena la cuadrícula de daño de puertas basándose en los datos JSON recibidos
+    /// NOTA: Comentado para permitir que las puertas se abran solo por proximidad de agentes
     /// </summary>
     /// <param name="json">Datos JSON con el estado de las puertas</param>
     public void FillDoorDamageGrid(string json)
     {
+        // COMENTADO: Ya no controlamos las puertas desde JSON
+        // Las puertas ahora se controlan automáticamente por proximidad de agentes
+        /*
         DoorDamageStateResponse state;
         try
         {
@@ -474,5 +555,6 @@ public class DoorDamageGrid : MonoBehaviour
                 CloseDoor(gridPos);
             }
         }
+        */
     }
 }
