@@ -22,7 +22,7 @@ def step():
     global model
     if model.end_game():
         print("Se acabo la simulación, reiniciando el modelo...")
-        model = TacoRescue.TacoRescueModel()
+        model = TacoRescueStrat.TacoRescueModel()
         return jsonify({"step": "Reinicado"})
     model.step()
     return jsonify({"step": model.steps})
