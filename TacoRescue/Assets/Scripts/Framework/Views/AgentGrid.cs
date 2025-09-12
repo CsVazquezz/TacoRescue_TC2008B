@@ -53,13 +53,13 @@ public class AgentGrid : MonoBehaviour
             }
         }
         List<Vector2Int> initialAgents = new List<Vector2Int>
-        {3 0 2 2 0 1
-            new Vector2Int(0, 2), 3
-            new Vector2Int(5, 5), 0
-            new Vector2Int(2, 7), 2
-            new Vector2Int(2, 7), 2
-            new Vector2Int(5, 5), 0
-            new Vector2Int(3, 0), 1
+        {
+            new Vector2Int(0, 2),
+            new Vector2Int(5, 5),
+            new Vector2Int(2, 7),
+            new Vector2Int(2, 7),
+            new Vector2Int(5, 5),
+            new Vector2Int(3, 0)
         };
         int id = 0;
         foreach (var agent in initialAgents)
