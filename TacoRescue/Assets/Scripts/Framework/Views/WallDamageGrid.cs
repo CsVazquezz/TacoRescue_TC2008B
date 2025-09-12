@@ -148,6 +148,69 @@ public class WallDamageGrid : MonoBehaviour
     }
 
     /// <summary>
+    /// Debug method to analyze wall renderers and materials
+    /// </summary>
+    [System.Diagnostics.Conditional("UNITY_EDITOR")]
+    public void AnalyzeWallRenderers()
+    {
+        Debug.Log("=== ANÁLISIS DE RENDERERS DE PAREDES ===");
+        
+        if (wallsParent == null)
+        {
+            Debug.LogError("wallsParent no asignado");
+            return;
+        }
+        
+        int wallsWithRenderer = 0;
+        int wallsWithoutRenderer = 0;
+        int wallsWithChildRenderer = 0;
+        
+        foreach (Transform wall in wallsParent)
+        {
+            if (wall.name.ToLower().Contains(wallNamePattern.ToLower()))
+            {
+                Renderer renderer = wall.GetComponent<Renderer>();
+                if (renderer != null)
+                {
+                    wallsWithRenderer++;
+                    Debug.Log($"✅ '{wall.name}' tiene Renderer - Material: {renderer.material?.name ?? "NULL"}");
+                    Debug.Log($"   Color actual: {renderer.material?.color ?? Color.magenta}");
+                }
+                else
+                {
+                    Renderer childRenderer = wall.GetComponentInChildren<Renderer>();
+                    if (childRenderer != null)
+                    {
+                        wallsWithChildRenderer++;
+                        Debug.Log($"🔍 '{wall.name}' tiene Renderer en hijo '{childRenderer.gameObject.name}' - Material: {childRenderer.material?.name ?? "NULL"}");
+                    }
+                    else
+                    {
+                        wallsWithoutRenderer++;
+                        Debug.LogWarning($"❌ '{wall.name}' NO tiene Renderer ni en objeto ni en hijos");
+                    }
+                }
+            }
+        }
+        
+        Debug.Log($"📊 RESUMEN RENDERERS:");
+        Debug.Log($"   Con Renderer directo: {wallsWithRenderer}");
+        Debug.Log($"   Con Renderer en hijo: {wallsWithChildRenderer}");
+        Debug.Log($"   Sin Renderer: {wallsWithoutRenderer}");
+        Debug.Log("=== FIN ANÁLISIS ===");
+    }
+
+    /// <summary>
+    /// Test method to manually damage a wall for testing
+    /// </summary>
+    public void TestWallDamage(int x, int y, int direction, int damageLevel)
+    {
+        Vector3Int wallKey = new Vector3Int(x, y, direction);
+        Debug.Log($"🧪 PRUEBA MANUAL: Dañando pared en ({x},{y}) dirección {GetDirectionName(direction)} nivel {damageLevel}");
+        ChangeWallColor(wallKey, damageLevel);
+    }
+
+    /// <summary>
     /// Convierte posición mundial a coordenadas de cuadrícula
     /// </summary>
     /// <param name="worldPos">Posición en el mundo</param>
@@ -245,27 +308,61 @@ public class WallDamageGrid : MonoBehaviour
                 Renderer renderer = wallObject.GetComponent<Renderer>();
                 if (renderer != null)
                 {
-                    // Cambiar color según nivel de daño
-                    Color newColor;
-                    switch (damageLevel)
+                    // Create a new material instance to avoid affecting all walls with the same material
+                    if (renderer.material != null)
                     {
-                        case 1: // Dañada
-                            newColor = damagedWallColor; // Color naranja para daño
-                            break;
-                        case 2: // Demolida
-                            newColor = demolishedWallColor; // Color rojo para demolición
-                            break;
-                        default: // Normal
-                            newColor = normalWallColor; // Color blanco normal
-                            break;
+                        // Create a new material instance for this specific wall
+                        Material newMaterial = new Material(renderer.material);
+                        
+                        // Cambiar color según nivel de daño
+                        Color newColor;
+                        switch (damageLevel)
+                        {
+                            case 1: // Dañada
+                                newColor = damagedWallColor; // Color naranja para daño
+                                break;
+                            case 2: // Demolida
+                                newColor = demolishedWallColor; // Color rojo para demolición
+                                break;
+                            default: // Normal
+                                newColor = normalWallColor; // Color blanco normal
+                                break;
+                        }
+                        
+                        newMaterial.color = newColor;
+                        renderer.material = newMaterial;
+                        Debug.Log($"✅ COLOR CAMBIADO EXITOSAMENTE: Pared '{wallObject.name}' en {wallKey} → {newColor}");
+                        Debug.Log($"   Material anterior: {renderer.material.name}");
+                        Debug.Log($"   Color aplicado: {newMaterial.color}");
                     }
-                    
-                    renderer.material.color = newColor;
-                    Debug.Log($" COLOR CAMBIADO: Pared '{wallObject.name}' en {wallKey} → {newColor}");
+                    else
+                    {
+                        Debug.LogWarning($"⚠️ Pared '{wallObject.name}' tiene Renderer pero sin Material asignado");
+                    }
                 }
                 else
                 {
-                    Debug.LogWarning($" Pared '{wallObject.name}' no tiene Renderer component");
+                    Debug.LogWarning($"❌ Pared '{wallObject.name}' no tiene Renderer component");
+                    
+                    // Try to find renderer in children
+                    Renderer childRenderer = wallObject.GetComponentInChildren<Renderer>();
+                    if (childRenderer != null)
+                    {
+                        Debug.Log($"🔍 Encontrado Renderer en hijo: {childRenderer.gameObject.name}");
+                        // Apply the same logic to child renderer
+                        if (childRenderer.material != null)
+                        {
+                            Material newMaterial = new Material(childRenderer.material);
+                            Color newColor = damageLevel == 1 ? damagedWallColor : (damageLevel == 2 ? demolishedWallColor : normalWallColor);
+                            newMaterial.color = newColor;
+                            childRenderer.material = newMaterial;
+                            Debug.Log($"✅ COLOR CAMBIADO EN HIJO: {childRenderer.gameObject.name} → {newColor}");
+                        }
+                    }
+                    else
+                    {
+                        Debug.LogError($"🚫 No se encontró Renderer ni en el objeto ni en sus hijos para '{wallObject.name}'");
+                    }
                 }
             }
             else
