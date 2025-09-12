@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 using Newtonsoft.Json;
+using TMPro; // Add this for TextMeshPro support
 
 [System.Serializable]
 public class StateResponse
@@ -36,6 +37,10 @@ public class TacoRescueController : MonoBehaviour
     private string baseUrl = "https://tacorescue-tc2008b.onrender.com";
     // Botón para ver el step y el estatus
     public Button stepButton;
+    
+    [Header("UI Display")]
+    public Text infoDisplayText; // For legacy UI Text
+    public TextMeshProUGUI infoDisplayTextTMP; // For TextMeshPro UI
 
     public FireGrid fireGridManager;
     public AgentGrid agentGridManager;
@@ -104,6 +109,10 @@ public class TacoRescueController : MonoBehaviour
                 StateResponse state = JsonConvert.DeserializeObject<StateResponse>(json);
                 if (state == null) yield break;
                 if (state.events == null) yield break;
+                
+                // Update the info display with current step
+                UpdateInfoDisplay(state.step);
+                
                 if (state.step == 0) 
                 {
                     fireGridManager.FillFireGrid(json);
@@ -140,6 +149,23 @@ public class TacoRescueController : MonoBehaviour
                     yield return StepSimulation();
                 }
             }   
+        }
+    }
+
+    private void UpdateInfoDisplay(int currentStep)
+    {
+        string infoText = $"Step: {currentStep}";
+        
+        // Update legacy Text component if assigned
+        if (infoDisplayText != null)
+        {
+            infoDisplayText.text = infoText;
+        }
+        
+        // Update TextMeshPro component if assigned
+        if (infoDisplayTextTMP != null)
+        {
+            infoDisplayTextTMP.text = infoText;
         }
     }
 }
