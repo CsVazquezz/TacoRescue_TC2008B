@@ -607,7 +607,7 @@ class TacoRescueAgent(Agent):
             "step": self.model.steps,
             "id": self.id,
             "action": "remove_false_alarm",
-            "pos": pos
+            "pos": self.pos
           })
 
         # Si llegó a una entrada y carga una víctima, dejarla
