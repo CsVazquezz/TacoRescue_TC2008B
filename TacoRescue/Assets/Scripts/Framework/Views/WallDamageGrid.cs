@@ -59,6 +59,9 @@ public class WallDamageGrid : MonoBehaviour
             {
                 Destroy(wallDamageObjects[wallKey1]);
                 wallDamageObjects.Remove(wallKey1);
+            }
+            if (wallDamageObjects.ContainsKey(wallKey2))
+            {
                 Destroy(wallDamageObjects[wallKey2]);
                 wallDamageObjects.Remove(wallKey2);
             }
