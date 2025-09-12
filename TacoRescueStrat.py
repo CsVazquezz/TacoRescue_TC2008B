@@ -87,12 +87,6 @@ class TacoRescueAgent(Agent):
   def spend_AP(self, cost):
     if self.AP >= cost:
       self.AP -= cost
-      self.model.events.append({
-        "step": self.model.steps,
-        "id": self.id,
-        "action": "remove_smoke",
-        "pos": (x, y)
-      })
       return True
     return False
 
@@ -109,6 +103,12 @@ class TacoRescueAgent(Agent):
     if self.spend_AP(1):
       x, y = pos
       self.model.fire[x][y] = 0
+      self.model.events.append({
+        "step": self.model.steps,
+        "id": self.id,
+        "action": "remove_smoke",
+        "pos": (x, y)
+      })
       return True
     return False
 
