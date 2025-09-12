@@ -106,7 +106,7 @@ public class TacoRescueController : MonoBehaviour
                 if (state.events == null) yield break;
                 if (state.step == 0) 
                 {
-                    // fireGridManager.FillFireGrid(json);
+                    fireGridManager.FillFireGrid(json);
                     yield return StepSimulation();
                 }
                 if (currentEventIndex >= state.events.Count) yield break;
@@ -126,7 +126,7 @@ public class TacoRescueController : MonoBehaviour
                     fireGridManager.UpdateFireGrid(json, ev, currentEventIndex);
                     doorDamageGridManager.UpdateDoorDamageGrid(json, ev, currentEventIndex);
                     wallDamageGridManager.UpdateWallDamageGrid(json, ev, currentEventIndex);
-                    // poiGridManager.UpdatePoiGrid(json, ev, currentEventIndex);
+                    poiGridManager.UpdatePoiGrid(json, ev, currentEventIndex);
 
                     currentEventIndex++;
                 } 
@@ -136,7 +136,7 @@ public class TacoRescueController : MonoBehaviour
                     fireGridManager.FillFireGrid(json);
                     doorDamageGridManager.FillDoorDamageGrid(json);
                     wallDamageGridManager.FillWallDamageGrid(json);
-                    //poiGridManager.ReplenishPoiGrid(json);
+                    poiGridManager.ReplenishPoiGrid(json);
                     yield return StepSimulation();
                 }
             }   

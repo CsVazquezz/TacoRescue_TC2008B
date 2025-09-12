@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 using Newtonsoft.Json;
 
@@ -6,7 +7,7 @@ using Newtonsoft.Json;
 public class PoiStateResponse
 {
     public int step;
-    public List<List<float>> poi;
+    public List<List<int>> poi;
     public List<SimulationEvent> events;
 }
 
@@ -60,7 +61,7 @@ public class PoiGrid : MonoBehaviour
     {
         if (ev == null) return;
         PoiStateResponse state = JsonConvert.DeserializeObject<PoiStateResponse>(json);
-        Vector2Int pos = new Vector2Int(ev.x, ev.y);
+        Vector2Int pos = new Vector2Int(ev.y, ev.x);
 
         if (ev.action == "pick_up_victim" && ev.step == state.step)
         {
@@ -68,16 +69,9 @@ public class PoiGrid : MonoBehaviour
             {
                 Destroy(poiObjects[pos]); // Remover PoiPrefab
                 poiObjects.Remove(pos);
-                RevealPoiObject(1, pos); // Revelar victimPrefab
-                Invoke(nameof(RemovePoiAtPos), 3f); // Esperar 3 segundos
-                void RemovePoiAtPos()
-                {
-                    if (poiObjects.ContainsKey(pos))
-                    {
-                        Destroy(poiObjects[pos]);
-                        poiObjects.Remove(pos);
-                    }
-                }
+                GameObject revealed = RevealPoiObject(1, pos);  // Revelar victimPrefab
+                Debug.Log("Victim prefab revealed: " + revealed);
+                StartCoroutine(RemoveRevealedAfterDelay(revealed, 3f)); // Esperar 3 segundos
             }
         }
         else if (ev.action == "remove_false_alarm")
@@ -86,17 +80,20 @@ public class PoiGrid : MonoBehaviour
             {
                 Destroy(poiObjects[pos]); // Remover PoiPrefab
                 poiObjects.Remove(pos);
-                RevealPoiObject(2, pos); // Revelar falseAlarmPrefab
-                Invoke(nameof(RemovePoiAtPos), 3f); // Esperar 3 segundos
-                void RemovePoiAtPos()
-                {
-                    if (poiObjects.ContainsKey(pos))
-                    {
-                        Destroy(poiObjects[pos]);
-                        poiObjects.Remove(pos);
-                    }
-                }
+                GameObject revealed = RevealPoiObject(2, pos); // Revelar falseAlarmPrefab
+                Debug.Log("False alarm prefab revealed");
+                StartCoroutine(RemoveRevealedAfterDelay(revealed, 3f)); // Esperar 3 segundos
             }
+        }
+    }
+
+    public IEnumerator RemoveRevealedAfterDelay (GameObject revealedObj, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        if (revealedObj != null)
+        {
+            Destroy(revealedObj);
         }
     }
 
@@ -119,28 +116,18 @@ public class PoiGrid : MonoBehaviour
             return;
         }
 
-        for (int y = 0; y < state.poi.Count; y++)
+        foreach (var obj in poiObjects.Values)
         {
-            for (int x = 0; x < state.poi[y].Count; x++)
-            {
-                int value = (int)state.poi[y][x];
-                Vector2Int pos = new Vector2Int(x, y);
+            if (obj != null) Destroy(obj);
+        }
+        poiObjects.Clear();
 
-                if (poiObjects.ContainsKey(pos))
-                {
-                    if (value == 0.0)
-                    {
-                        Destroy(poiObjects[pos]);
-                        poiObjects.Remove(pos);
-                    }
-                }
-                else
-                {
-                    if (value != 0.0)
-                    {
-                        SpawnPoiObject(pos);
-                    }
-                }
+        foreach (var coord in state.poi)
+        {
+            if (coord.Count == 2)
+            {
+                Vector2Int pos = new Vector2Int(coord[1], coord[0]);
+                SpawnPoiObject(pos);
             }
         }
     }
@@ -168,7 +155,7 @@ public class PoiGrid : MonoBehaviour
         poiObjects[gridPos] = obj;
     }
 
-    private void RevealPoiObject(int value, Vector2Int gridPos)
+    private GameObject  RevealPoiObject(int value, Vector2Int gridPos)
     {
         GameObject prefab = (value == 1) ? victimPrefab : falseAlarmPrefab;
 
@@ -188,6 +175,6 @@ public class PoiGrid : MonoBehaviour
             obj.transform.SetParent(poiParent);
         }
 
-        poiObjects[gridPos] = obj;
+        return obj;
     }
 }

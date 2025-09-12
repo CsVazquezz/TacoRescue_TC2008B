@@ -1,9 +1,9 @@
 from flask import Flask, jsonify, request
-import TacoRescue
+import TacoRescueStrat
 
 app = Flask(__name__)
 
-model = TacoRescue.TacoRescueModel()
+model = TacoRescueStrat.TacoRescueModel()
 
 @app.route("/")
 def home():
@@ -22,7 +22,7 @@ def step():
     global model
     if model.end_game():
         print("Se acabo la simulación, reiniciando el modelo...")
-        model = TacoRescue.TacoRescueModel()
+        model = TacoRescueStrat.TacoRescueModel()
         return jsonify({"step": "Reinicado"})
     model.step()
     return jsonify({"step": model.steps})
@@ -47,7 +47,7 @@ def get_state():
         "walls": model.walls.tolist(),
         "walls_damage": model.walls_damage.tolist(),
         "doors": model.doors,
-        "poi": model.fire.tolist(),
+        "poi": model.poi_unknown,
         "damage": model.damage,
         "rescued_count": model.rescued_count,
         "lost_victims": model.lost_victims
