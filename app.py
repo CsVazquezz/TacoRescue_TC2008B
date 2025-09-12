@@ -1,9 +1,9 @@
 from flask import Flask, jsonify, request
-import TacoRescue
+import TacoRescueStrat
 
 app = Flask(__name__)
 
-model = TacoRescue.TacoRescueModel()
+model = TacoRescueStrat.TacoRescueModel()
 
 @app.route("/")
 def home():
